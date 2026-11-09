@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} &middot; {{ settings.APP_NAME }}{% endblock %}
+{% block body %}
+<div class="page" style="max-width:600px;padding-top:88px;">
+  <div class="masthead" style="border-bottom-width:1px;">
+    <div>
+      <div class="eyebrow">Error {{ code }}</div>
+      <h1><em>{{ message }}</em></h1>
+    </div>
+  </div>
+  <div class="btn-row">
+    <a class="btn primary" href="/app/">Back to the dashboard</a>
+    <a class="btn" href="{{ url_for('auth.login') }}">Sign in</a>
+  </div>
+</div>
+{% endblock %}
