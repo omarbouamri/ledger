@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Create an account &middot; {{ settings.APP_NAME }}{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+  {% include "_aside.html" %}
+  <main class="auth-main">
+    <div class="auth-card fade-up">
+      <button class="theme-btn" data-theme-toggle title="Switch theme" aria-label="Switch theme" style="margin-bottom:22px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg>
+      </button>
+
+      {% if closed %}
+        <h2>Signup is closed</h2>
+        <div class="sub">This instance is not accepting new accounts.</div>
+        <div class="alert warn">Ask an administrator to create an account for you.</div>
+        <div class="auth-foot"><a href="{{ url_for('auth.login') }}">Back to sign in</a></div>
+      {% else %}
+        <h2>Create an account</h2>
+        <div class="sub">
+          {% if first %}This is the first account on this instance, so it becomes the administrator.
+          {% else %}Your tracking board, notes and sent mail stay with your account.{% endif %}
+        </div>
+
+        {% with msgs = get_flashed_messages(with_categories=true) %}
+          {% for category, msg in msgs %}
+            <div class="alert {{ 'err' if category == 'err' else 'ok' }}">{{ msg }}</div>
+          {% endfor %}
+        {% endwith %}
+
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name"
+                   value="{{ form.get('name', '') }}" required autofocus placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email"
+                   value="{{ form.get('email', '') }}" required placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="new-password"
+                   required minlength="10" placeholder="At least 10 characters">
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm password</label>
+            <input id="confirm" name="confirm" type="password" autocomplete="new-password" required>
+          </div>
+          {% if not first and settings.SIGNUP_INVITE_CODE %}
+          <div class="field">
+            <label for="invite">Invite code</label>
+            <input id="invite" name="invite" type="text" required placeholder="Given to you by an administrator">
+          </div>
+          {% endif %}
+          <button class="btn primary wide" type="submit" style="margin-top:6px;">Create account</button>
+        </form>
+
+        <div class="auth-foot">
+          Already have one? <a href="{{ url_for('auth.login') }}">Sign in</a>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}

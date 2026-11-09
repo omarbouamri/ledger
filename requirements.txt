@@ -1,0 +1,10 @@
+# JobScout runtime dependencies
+dash>=3.0,<4
+plotly>=6.0,<7
+pandas>=2.2
+numpy>=1.26
+Flask>=3.0
+Flask-Login>=0.6.3
+Werkzeug>=3.0
+google-genai>=1.0       # optional: AI drafting is disabled without an API key
+python-dotenv>=1.0      # optional: loads .env in development

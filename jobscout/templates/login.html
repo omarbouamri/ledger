@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Sign in &middot; {{ settings.APP_NAME }}{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+  {% include "_aside.html" %}
+  <main class="auth-main">
+    <div class="auth-card fade-up">
+      <button class="theme-btn" data-theme-toggle title="Switch theme" aria-label="Switch theme" style="margin-bottom:22px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"></svg>
+      </button>
+      <h2>Sign in</h2>
+      <div class="sub">Pick the ledger up where you left it.</div>
+
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% for category, msg in msgs %}
+          <div class="alert {{ 'err' if category == 'err' else 'ok' }}">{{ msg }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="post" novalidate>
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email"
+                 value="{{ email }}" required autofocus placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password"
+                 autocomplete="current-password" required placeholder="Your password">
+        </div>
+        <label style="display:flex;gap:7px;align-items:center;font-size:13px;color:var(--ink-soft);margin:4px 0 20px;">
+          <input type="checkbox" name="remember" value="1" style="width:auto;">
+          Keep me signed in on this device
+        </label>
+        <button class="btn primary wide" type="submit">Sign in</button>
+      </form>
+
+      <div class="auth-foot">
+        {% if settings.ALLOW_SIGNUP %}
+          No account yet? <a href="{{ url_for('auth.signup') }}">Create one</a>
+        {% else %}
+          Signup is closed &mdash; ask an administrator for an account.
+        {% endif %}
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}
